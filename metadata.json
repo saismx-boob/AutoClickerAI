@@ -1,0 +1,6 @@
+{
+  "name": "AutoClicker AI",
+  "description": "Smart Auto Clicker with OCR text & image recognition, humanized anti-detection taps, AI script generation, scheduling, and cloud backups.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

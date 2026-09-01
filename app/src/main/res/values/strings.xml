@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">AutoClicker AI</string>
+    <string name="accessibility_service_description">Service d\'accessibilité requis pour exécuter les clics, défilements et gestes automatisés sans accès root.</string>
+</resources>

@@ -1,35 +1,48 @@
-name: Build APK
+name: Build Android APK (Kaitlin)
 
 on:
   push:
-    branches: [ main ]
+    branches:
+      - main
+      - master
   pull_request:
-    branches: [ main ]
+    branches:
+      - main
+      - master
+  workflow_dispatch: # Permet de lancer le build manuellement depuis GitHub
 
 jobs:
   build:
+    name: Build APK
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout du code
+        uses: actions/checkout@v4
 
-      # ÉTAPE CRUCIALE : Nettoie les fins de ligne Windows et donne les droits
-      - name: Fix gradlew permissions and line endings
-        run: |
-          sed -i 's/\r$//' gradlew
-          chmod +x gradlew
-
-      # Version Java (mise à jour vers v5 pour éviter les warnings)
-      - name: Set up JDK 17
-        uses: actions/setup-java@v5
+      - name: Configuration de Java 17
+        uses: actions/setup-java@v4
         with:
-          java-version: '17'
           distribution: 'temurin'
+          java-version: '17'
+          cache: 'gradle'
 
-      - name: Build debug APK
-        run: ./gradlew assembleDebug --stacktrace
+      - name: Configuration de Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: 'stable'
+          cache: true
 
-      - name: Upload APK artifact
+      - name: Installation des dépendances
+        run: flutter pub get
+
+      - name: Compilation de l'APK (Release)
+        run: flutter build apk --release
+
+      - name: Sauvegarde de l'APK (Artifact)
         uses: actions/upload-artifact@v4
         with:
-          name: app-debug
-          path: app/build/outputs/apk/debug/*.apk
+          name: kaitlin-release-apk
+          path: build/app/outputs/flutter-apk/app-release.apk
+          retention-days: 7
+          

@@ -13,23 +13,24 @@ jobs:
       - name: Checkout du code
         uses: actions/checkout@v4
 
-      # Java 17 (requis par les versions récentes d'AGP)
       - name: Configuration de Java 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      # PAS de Flutter ici — on utilise Gradle directement
-      - name: Rendre gradlew exécutable
-        run: chmod +x ./gradlew
+      # Installe Gradle 9.3.1 (version indiquée dans votre wrapper.properties)
+      - name: Configuration de Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '9.3.1'
 
-      - name: Compilation de l'APK (Release)
-        run: ./gradlew assembleRelease
+      - name: Compilation de l'APK (Debug)
+        run: gradle assembleDebug
 
       - name: Sauvegarde de l'APK (Artifact)
         uses: actions/upload-artifact@v4
         with:
-          name: app-release
-          path: app/build/outputs/apk/release/app-release.apk
+          name: app-debug
+          path: app/build/outputs/apk/debug/app-debug.apk
           

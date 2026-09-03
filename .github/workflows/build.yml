@@ -19,11 +19,21 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      # Installe Gradle 9.3.1 (version indiquée dans votre wrapper.properties)
       - name: Configuration de Gradle
         uses: gradle/actions/setup-gradle@v4
         with:
           gradle-version: '9.3.1'
+
+      # 🆕 Génère le keystore manquant
+      - name: Génération du keystore de debug
+        run: |
+          keytool -genkeypair -v \
+            -keystore debug.keystore \
+            -storepass android \
+            -alias androiddebugkey \
+            -keypass android \
+            -keyalg RSA -keysize 2048 -validity 10000 \
+            -dname "CN=Android Debug,O=Android,C=US"
 
       - name: Compilation de l'APK (Debug)
         run: gradle assembleDebug
